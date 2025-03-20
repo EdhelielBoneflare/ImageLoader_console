@@ -14,7 +14,7 @@ public class InternalErrorHandler {
 
     public static void handleInternalException(Exception e) {
         String id = generateUniqueId();
-        logger.error("ID: " + id + ". " + e.getMessage());
+        logger.error("ID: {}. {}", id, e.getMessage());
         System.out.println("Internal error. Please, address support.\nID: " + id);
     }
 }

@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class HTMLParser {
     private static HTMLParser instance = null;
@@ -30,7 +31,8 @@ public class HTMLParser {
     }
 
     public void getPageImages(String url, String directoryPath)
-            throws MalformedURLException, DirectoryAccessException, IOException {
+            throws MalformedURLException, DirectoryAccessException, IOException,
+            InterruptedException, ExecutionException {
         Validator.validateUrl(url);
         Validator.validateDirectory(directoryPath);
 

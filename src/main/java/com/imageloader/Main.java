@@ -7,6 +7,7 @@ import com.imageloader.exception.DirectoryAccessException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
 public class Main {
 
@@ -38,6 +39,9 @@ public class Main {
             htmlParser.getPageImages(url, directoryPath);
         } catch (MalformedURLException | DirectoryAccessException e) {
             System.out.println("Error:" + e.getMessage());
+        } catch (InterruptedException | ExecutionException e) {
+            Thread.currentThread().interrupt();
+            InternalErrorHandler.handleInternalException(e);
         } catch (IOException e) {
             InternalErrorHandler.handleInternalException(e);
         }

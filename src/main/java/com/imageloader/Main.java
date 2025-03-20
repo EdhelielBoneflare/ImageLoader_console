@@ -1,27 +1,48 @@
 package com.imageloader;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.imageloader.exception.InternalErrorHandler;
+import com.imageloader.service.HTMLParser;
+import com.imageloader.exception.DirectoryAccessException;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Scanner;
 
 public class Main {
-    private static final Logger logger = LoggerFactory.getLogger(Main.class);
-    private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+        HTMLParser htmlParser = HTMLParser.getInstance();
+        Scanner scanner = new Scanner(System.in);
 
         System.out.println("Provide URL for image download: ");
-        String urlInput = scanner.nextLine();
-        try {
-            URL url = new URL(urlInput);
-        } catch (MalformedURLException e) {
-            System.out.println("Wrong format of the URL. Please provide valid URL.");
+        String url = null;
+        while (url == null) {
+            url = scanner.nextLine().trim();
+            if (url.isEmpty()) {
+                System.out.println("URL cannot be empty. Please enter a valid URL.");
+                url = null;
+            }
         }
 
-    }
+        System.out.print("Enter directory path to save images: ");
+        String directoryPath = null;
+        while (directoryPath == null) {
+            directoryPath = scanner.nextLine().trim();
+            if (directoryPath.isEmpty()) {
+                System.out.println("Directory path cannot be empty. Please enter a valid path.");
+                directoryPath = null;
+            }
+        }
 
+        try {
+            htmlParser.getPageImages(url, directoryPath);
+        } catch (MalformedURLException | DirectoryAccessException e) {
+            System.out.println("Error:" + e.getMessage());
+        } catch (IOException e) {
+            InternalErrorHandler.handleInternalException(e);
+        }
+
+        scanner.close();
+    }
 
 }
